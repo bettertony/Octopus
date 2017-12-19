@@ -1,5 +1,5 @@
 # Octopus
-Streaming Analytics & Complex Event Processing Platform
+Streaming Analytics & Pattern Event Processing Platform
 
 ## Building from source
 Install some dependencies first:
