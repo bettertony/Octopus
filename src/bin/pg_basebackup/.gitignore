@@ -1,0 +1,6 @@
+/pg_basebackup
+/pg_receivexlog
+/pg_recvlogical
+/octopus-basebackup
+
+/tmp_check/

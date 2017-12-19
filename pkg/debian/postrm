@@ -1,0 +1,19 @@
+#! /bin/sh
+
+set -e
+
+INSTALL_PREFIX=/usr/lib/octopus
+rm /etc/ld.so.conf.d/octopus.conf
+ldconfig
+
+rm -f /usr/bin/octopus
+rm -f /usr/bin/octopus-debug
+rm -f /usr/bin/octopus-ctl
+rm -f /usr/bin/pg_ctl
+rm -f /usr/bin/octopus-init
+rm -f /usr/bin/psql
+rm -f /usr/bin/octopus
+rm -f /usr/bin/pg_config
+rm -f /usr/bin/octopus-dump
+rm -f /usr/bin/octopus-dumpall
+rm -f /usr/bin/octopus-restore

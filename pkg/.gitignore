@@ -1,0 +1,6 @@
+build
+*.deb
+*.rpm
+*.gz
+*.bz2
+*-*

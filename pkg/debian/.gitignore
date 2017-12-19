@@ -1,0 +1,7 @@
+changelog
+control
+docs
+files
+octopus
+*debhelper*
+*.substvars

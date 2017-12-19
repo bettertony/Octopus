@@ -1,0 +1,138 @@
+CREATE STREAM stream0 (id integer);
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema |  name   | queries 
+--------+---------+---------
+ public | stream0 | 
+(1 row)
+
+CREATE CONTINUOUS VIEW ps0 AS SELECT id FROM stream0;
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema |   name    | queries 
+--------+-----------+---------
+ public | ps0_osrel | 
+ public | stream0   | {ps0}
+(2 rows)
+
+CREATE CONTINUOUS VIEW ps1 AS SELECT count(*) FROM stream0;
+CREATE CONTINUOUS VIEW ps2 AS SELECT id FROM stream0;
+CREATE STREAM stream1 (x integer, y timestamp);
+CREATE CONTINUOUS VIEW ps3 AS SELECT x, y FROM stream1;
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema |   name    |    queries    
+--------+-----------+---------------
+ public | ps0_osrel | 
+ public | ps1_osrel | 
+ public | ps2_osrel | 
+ public | ps3_osrel | 
+ public | stream0   | {ps0,ps1,ps2}
+ public | stream1   | {ps3}
+(6 rows)
+
+CREATE CONTINUOUS VIEW ps4 AS SELECT id::text FROM stream0;
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema |   name    |      queries      
+--------+-----------+-------------------
+ public | ps0_osrel | 
+ public | ps1_osrel | 
+ public | ps2_osrel | 
+ public | ps3_osrel | 
+ public | ps4_osrel | 
+ public | stream0   | {ps0,ps1,ps2,ps4}
+ public | stream1   | {ps3}
+(7 rows)
+
+CREATE STREAM stream2 (x integer);
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema |   name    |      queries      
+--------+-----------+-------------------
+ public | ps0_osrel | 
+ public | ps1_osrel | 
+ public | ps2_osrel | 
+ public | ps3_osrel | 
+ public | ps4_osrel | 
+ public | stream0   | {ps0,ps1,ps2,ps4}
+ public | stream1   | {ps3}
+ public | stream2   | 
+(8 rows)
+
+CREATE CONTINUOUS VIEW ps5 AS SELECT x FROM stream2;
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema |   name    |      queries      
+--------+-----------+-------------------
+ public | ps0_osrel | 
+ public | ps1_osrel | 
+ public | ps2_osrel | 
+ public | ps3_osrel | 
+ public | ps4_osrel | 
+ public | ps5_osrel | 
+ public | stream0   | {ps0,ps1,ps2,ps4}
+ public | stream1   | {ps3}
+ public | stream2   | {ps5}
+(9 rows)
+
+DROP CONTINUOUS VIEW ps0;
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema |   name    |    queries    
+--------+-----------+---------------
+ public | ps1_osrel | 
+ public | ps2_osrel | 
+ public | ps3_osrel | 
+ public | ps4_osrel | 
+ public | ps5_osrel | 
+ public | stream0   | {ps1,ps2,ps4}
+ public | stream1   | {ps3}
+ public | stream2   | {ps5}
+(8 rows)
+
+DROP CONTINUOUS VIEW ps1;
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema |   name    |  queries  
+--------+-----------+-----------
+ public | ps2_osrel | 
+ public | ps3_osrel | 
+ public | ps4_osrel | 
+ public | ps5_osrel | 
+ public | stream0   | {ps2,ps4}
+ public | stream1   | {ps3}
+ public | stream2   | {ps5}
+(7 rows)
+
+DROP CONTINUOUS VIEW ps2;
+DROP CONTINUOUS VIEW ps3;
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema |   name    | queries 
+--------+-----------+---------
+ public | ps4_osrel | 
+ public | ps5_osrel | 
+ public | stream0   | {ps4}
+ public | stream1   | 
+ public | stream2   | {ps5}
+(5 rows)
+
+DROP CONTINUOUS VIEW ps5;
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema |   name    | queries 
+--------+-----------+---------
+ public | ps4_osrel | 
+ public | stream0   | {ps4}
+ public | stream1   | 
+ public | stream2   | 
+(4 rows)
+
+DROP STREAM stream2;
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema |   name    | queries 
+--------+-----------+---------
+ public | ps4_osrel | 
+ public | stream0   | {ps4}
+ public | stream1   | 
+(3 rows)
+
+DROP STREAM stream1;
+DROP STREAM stream0 CASCADE;
+NOTICE:  drop cascades to continuous view ps4
+SELECT schema, name, queries FROM octopus_streams() ORDER BY name;
+ schema | name | queries 
+--------+------+---------
+(0 rows)
+

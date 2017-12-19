@@ -1,0 +1,76 @@
+Name: octopus
+Version: __VERSION__
+Release: 1
+Summary: Octopus
+License: GPLv3
+Group: Applications/Databases
+Vendor: Octopus
+Packager: <packaging@octopus.com>
+URL: http://octopus.com
+
+BuildArch: x86_64
+AutoReqProv: no
+Prefix: __PREFIX__
+
+%description
+Octopus is a streaming SQL database that runs SQL queries continuously
+on streams, incrementally storing the results in tables.
+
+%files
+%defattr(-,root,root,-)
+__PREFIX__/*
+
+%post
+echo "$RPM_INSTALL_PREFIX/lib" > /etc/ld.so.conf.d/octopus.conf
+/sbin/ldconfig
+
+ln -s $RPM_INSTALL_PREFIX/bin/octopus /usr/bin/octopus
+ln -s $RPM_INSTALL_PREFIX/bin/octopus-debug /usr/bin/octopus-debug
+ln -s $RPM_INSTALL_PREFIX/bin/octopus-ctl /usr/bin/octopus-ctl
+ln -s $RPM_INSTALL_PREFIX/bin/octopus-ctl /usr/bin/pg_ctl
+ln -s $RPM_INSTALL_PREFIX/bin/octopus-init /usr/bin/octopus-init
+ln -s $RPM_INSTALL_PREFIX/bin/psql /usr/bin/psql
+ln -s $RPM_INSTALL_PREFIX/bin/psql /usr/bin/octopus
+ln -s $RPM_INSTALL_PREFIX/bin/octopus-config /usr/bin/pg_config
+ln -s $RPM_INSTALL_PREFIX/bin/octopus-dump /usr/bin/octopus-dump
+ln -s $RPM_INSTALL_PREFIX/bin/octopus-dumpall /usr/bin/octopus-dumpall
+ln -s $RPM_INSTALL_PREFIX/bin/octopus-restore /usr/bin/octopus-restore
+
+echo "
+    ____  _            ___            ____  ____
+   / __ \(_)___  ___  / (_)___  ___  / __ \/ __ )
+  / /_/ / / __ \/ _ \/ / / __ \/ _ \/ / / / __  |
+ / ____/ / /_/ /  __/ / / / / /  __/ /_/ / /_/ /
+/_/   /_/ .___/\___/_/_/_/ /_/\___/_____/_____/
+       /_/
+
+Octopus successfully installed. To get started, initialize a
+database directory:
+
+octopus-init -D <data directory>
+
+where <data directory> is a nonexistent directory where you'd
+like all of your database files to live.
+
+You can find the Octopus documentation at:
+
+http://docs.octopus.com
+"
+
+%postun
+rm /etc/ld.so.conf.d/octopus.conf
+/sbin/ldconfig
+
+rm -f /usr/bin/octopus
+rm -f /usr/bin/octopus-debug
+rm -f /usr/bin/octopus-ctl
+rm -f /usr/bin/pg_ctl
+rm -f /usr/bin/octopus-init
+rm -f /usr/bin/psql
+rm -f /usr/bin/octopus
+rm -f /usr/bin/pg_config
+rm -f /usr/bin/octopus-dump
+rm -f /usr/bin/octopus-dumpall
+rm -f /usr/bin/octopus-restore
+
+%clean

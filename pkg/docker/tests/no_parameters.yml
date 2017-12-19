@@ -1,0 +1,5 @@
+version: "2"
+services:
+    octopus:
+        build: ../
+        image: octopus/octopus:latest
